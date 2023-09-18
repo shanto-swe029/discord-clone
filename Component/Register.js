@@ -14,6 +14,7 @@ function Register() {
             <input
               className="min-w-full rounded-md bg-[#1e1f22] p-2"
               type="email"
+              required
             />
           </div>
           <div className="pt-3">
@@ -28,6 +29,7 @@ function Register() {
             <input
               className="min-w-full rounded-md bg-[#1e1f22] p-3"
               type="text"
+              required
             />
           </div>
           <div className="pt-3">
@@ -35,6 +37,7 @@ function Register() {
             <input
               className="min-w-full rounded-md bg-[#1e1f22] p-3"
               type="password"
+              required
             />
           </div>
           <div className="pt-3">
@@ -42,6 +45,7 @@ function Register() {
             <input
               className="min-w-full rounded-md bg-[#1e1f22] p-3"
               type="date"
+              required
             />
           </div>
           <div className="py-3 max-w-[400px] flex gap-2 pl-0">
@@ -74,7 +78,7 @@ function Register() {
           <span className="text-gray-400">.</span>
         </div>
         <div className="pt-3">
-          <Link href="/" className=" text-blue-500 text-sm hover:underline">
+          <Link href="/login" className=" text-blue-500 text-sm hover:underline">
             Already have an account?
           </Link>
         </div>

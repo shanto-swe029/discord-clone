@@ -17,14 +17,14 @@ function Login() {
               <p className="font-bold text-[#b4b9c0] py-2">EMAIL</p>
               <input
                 className="min-w-full rounded-sm bg-[#1e1f22] p-3"
-                type="email"
+                type="email" required
               />
             </div>
             <div className="pt-3">
               <p className="font-bold text-[#b4b9c0] py-2">PASSWORD</p>
               <input
                 className="min-w-full rounded-sm bg-[#1e1f22] p-3"
-                type="password"
+                type="password" required
               />
             </div>
             <div className="pt-2 pb-2">
