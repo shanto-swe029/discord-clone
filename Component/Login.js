@@ -1,7 +1,33 @@
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const userdata = { email, password };
+  // console.log(userdata);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const response = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userdata }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      console.log(data.message); // Successful login
+    } else {
+      console.error(data.message); // Invalid credentials
+    }
+  };
+
   return (
     <div className="m-auto bg-[#313338] text-white rounded-lg p-5 min-w-[485px] md:w-[500px]">
       <div>
@@ -11,20 +37,24 @@ function Login() {
             We&apos;re so excited to see you again!
           </p>
         </div>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="text-sm">
             <div className="pt-3">
               <p className="font-bold text-[#b4b9c0] py-2">EMAIL</p>
               <input
                 className="min-w-full rounded-sm bg-[#1e1f22] p-3"
-                type="email" required
+                type="email"
+                required
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="pt-3">
               <p className="font-bold text-[#b4b9c0] py-2">PASSWORD</p>
               <input
                 className="min-w-full rounded-sm bg-[#1e1f22] p-3"
-                type="password" required
+                type="password"
+                required
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div className="pt-2 pb-2">

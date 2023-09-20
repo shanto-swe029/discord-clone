@@ -1,27 +1,76 @@
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 
 function Register() {
+  const [email, setEmail] = useState('')
+  const [displayName, setDisplayName] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [dob, setDob] = useState('')
+  const [error, setError] = useState(null);
+
+  const router = useRouter();
+
+  const credentials = {email, displayName, username, password, dob};
+  // console.log(credentials);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const response = await fetch("/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ credentials }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      console.log(data.message); // Successful registration
+      router.push("/login")
+    } else {
+      // Check for duplicate email error
+      if (response.status === 400 && data.error === 'Email already exists') {
+        setError('This email is already registered. Please use a different email.');
+        // alert('This email is already registered. Please use a different email.');
+      } else {
+        console.error(data.error); // Other error
+      }
+    }
+  };
+  
   const label =
     "(Optional) It's okay to send me emails with Discord updates, tips, and special offers. You can opt out at any time.";
   return (
     <div className="m-auto bg-[#313338] text-white p-5 min-w-[400px] md:w-[475px] max-w-[475px] rounded-lg">
       <h2 className="text-2xl text-center">Create an account</h2>
+      {error && (
+        <div className="bg-red-500 text-white p-2 rounded mt-4">
+          {error}
+        </div>
+      )}
       <div className="text-sm">
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="pt-3">
             <p className="font-bold text-[#b4b9c0] py-2">EMAIL</p>
             <input
               className="min-w-full rounded-md bg-[#1e1f22] p-2"
               type="email"
-              required
+              required name="email" 
+              onChange={(e)=>{
+                setEmail(e.target.value)
+                setError(null)
+              }}
             />
           </div>
           <div className="pt-3">
             <p className="font-bold text-[#b4b9c0] py-2">DISPLAY NAME</p>
             <input
               className="min-w-full rounded-md bg-[#1e1f22] p-3"
-              type="text"
+              type="text" name="displayName" onChange={(e)=>setDisplayName(e.target.value)}
             />
           </div>
           <div className="pt-3">
@@ -29,7 +78,7 @@ function Register() {
             <input
               className="min-w-full rounded-md bg-[#1e1f22] p-3"
               type="text"
-              required
+              required name="userName" onChange={(e)=>setUsername(e.target.value)}
             />
           </div>
           <div className="pt-3">
@@ -37,7 +86,7 @@ function Register() {
             <input
               className="min-w-full rounded-md bg-[#1e1f22] p-3"
               type="password"
-              required
+              required name="password" onChange={(e)=>setPassword(e.target.value)}
             />
           </div>
           <div className="pt-3">
@@ -45,7 +94,7 @@ function Register() {
             <input
               className="min-w-full rounded-md bg-[#1e1f22] p-3"
               type="date"
-              required
+              required name="dob" onChange={(e)=>setDob(e.target.value)}
             />
           </div>
           <div className="py-3 max-w-[400px] flex gap-2 pl-0">
