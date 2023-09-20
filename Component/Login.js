@@ -1,9 +1,12 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const router = useRouter();
 
   const userdata = { email, password };
   // console.log(userdata);
@@ -23,7 +26,9 @@ function Login() {
 
     if (response.ok) {
       console.log(data.message); // Successful login
+      router.push("/");
     } else {
+      setError(data.message)
       console.error(data.message); // Invalid credentials
     }
   };
@@ -37,6 +42,9 @@ function Login() {
             We&apos;re so excited to see you again!
           </p>
         </div>
+        {error && (
+          <div className="bg-red-500 text-white p-2 rounded mt-4">{error}</div>
+        )}
         <form onSubmit={handleSubmit}>
           <div className="text-sm">
             <div className="pt-3">
@@ -45,7 +53,10 @@ function Login() {
                 className="min-w-full rounded-sm bg-[#1e1f22] p-3"
                 type="email"
                 required
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setError(null);
+                }}
               />
             </div>
             <div className="pt-3">
