@@ -29,7 +29,7 @@ function Register() {
     const data = await response.json();
 
     if (response.ok) {
-      console.log(data.message); // Successful registration
+      alert(data.message); // Successful registration
       router.push("/login")
     } else {
       // Check for duplicate email error

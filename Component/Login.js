@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -8,30 +8,47 @@ function Login() {
   const [error, setError] = useState(null);
   const router = useRouter();
 
-  const userdata = { email, password };
-  // console.log(userdata);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const response = await fetch("/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userdata }),
+      body: JSON.stringify({ userdata: { email, password } }), // Note: Use the correct structure for userdata
     });
-
+  
     const data = await response.json();
-
+  
     if (response.ok) {
-      console.log(data.message); // Successful login
+      alert(data.message); // Successful login
       router.push("/");
     } else {
-      setError(data.message)
+      setError(data.message);
       console.error(data.message); // Invalid credentials
     }
   };
+
+  useEffect(() => {
+    const checkLoggedIn = async () => {
+      const response = await fetch("/api/login", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        router.push("/");
+      }
+    };
+
+    checkLoggedIn();
+  }, []);
 
   return (
     <div className="m-auto bg-[#313338] text-white rounded-lg p-5 min-w-[485px] md:w-[500px]">
